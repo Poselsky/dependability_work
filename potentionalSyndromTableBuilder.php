@@ -2,46 +2,33 @@
 
 
 
-function buildTable($S, $n)
+function buildTable($S)
 {
-    $Rp = [5][15];
+    $Rp = array();
+    $rows = sizeof($S);
+    $columns = sizeof($S[0]);
 
-    for ($i = 0; $i < 15; $i++) {
-        for ($k = 0; $k < 5; $k++) {
-
+    for ($i = 0; $i < $rows; $i++) {
+        for ($k = 0; $k < $columns; $k++) {
             $h = $k + 1;
 
-            if ($S[$i][$k] == 1) {
-                $Rp[$i][2 * $h - 2] = 'X';
+            $nextOneRight = ($k + 1) % $columns;
+            $nextTwoRight = ($k + 2) % $columns;
+
+            if($S[$i][$k] === 1) {
                 $Rp[$i][2 * $h - 1] = 'X';
+                $Rp[$i][2 * $h - 2] = 'X';
             } else {
+                if ($S[$i][$nextOneRight] === 0) {
+                    $Rp[$i][2 * $h - 1] = 0;
+                }else {
+                    $Rp[$i][2 * $h - 1] = 1;
+                }
 
-                if ($k == ($n - 2)) {
-                    if ($S[$i][$k + 1] == 0) {
-                        $Rp[$i][2 * $h - 2] = 0;
-                    } else {
-                        $Rp[$i][2 * $h - 2] = 1;
-                    }
-
-                    if ($S[$i][0] == 0) {
-                        $Rp[$i][2 * $h - 1] = 0;
-                    } else {
-                        $Rp[$i][2 * $h - 1] = 1;
-                    }
-                } else if ($k == ($n - 1)) {
-                    $z = 0;
-
-                    if ($S[$i][$z] == 0) {
-                        $Rp[$i][2 * $h - 2] = 0;
-                    } else {
-                        $Rp[$i][2 * $h - 2] = 1;
-                    }
-
-                    if ($S[$i][$z + 1] == 0) {
-                        $Rp[$i][2 * $h - 1] = 0;
-                    } else {
-                        $Rp[$i][2 * $h - 1] = 1;
-                    }
+                if ($S[$i][$nextTwoRight] === 0) {
+                    $Rp[$i][2 * $h - 2] = 0;
+                }else {
+                    $Rp[$i][2 * $h - 2] = 1;
                 }
             }
         }
