@@ -3,27 +3,27 @@
 class BlockComparer
 {
 
-    static function compare($syndromeTable, $columns)
+    static function compare($syndromeTable, $rows)
     {
         $count = 0;
 
         for ($i = 0; $i < sizeof($syndromeTable); $i++) {
-            for ($j = 0; $j < sizeof($columns); $j++) {
+            for ($j = 0; $j < sizeof($rows); $j++) {
 
                 $count++;
                 $sTableValue = $syndromeTable[$i][$j];
-                $colValue = $columns[$j];
+                $colValue = $rows[$j];
 
                 if ($sTableValue !== $colValue && $sTableValue !== 'X') {
                     break;
                 }else{
-                    if($j === (sizeof($columns) - 1)){
+                    if($j === (sizeof($rows) - 1)){
                         echo "<br>";
                         print_r($syndromeTable[$i]);
                         echo "<br>";
                         echo "Searched column";
                         echo "<br>";
-                        print_r($columns);
+                        print_r($rows);
                         echo "<br>";
                         echo "<br>";
 

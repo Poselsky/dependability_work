@@ -1,13 +1,17 @@
 <?php
 
 class SyndromeGenerator{
-    function getSyndromeGeneratedTable($syndromeTable){
-        for ($i=0; $i < sizeof($syndromeTable); $i++) { 
-            for ($k=0; $k < sizeof($syndromeTable[0]); $k++) { 
-                if($syndromeTable[$i][$k] === 'X'){
+    public static function getSyndromeGeneratedTable($inputTable){
+        $syndromeTable = array();
+        for ($i=0; $i < sizeof($inputTable); $i++) { 
+            for ($k=0; $k < sizeof($inputTable[0]); $k++) { 
+                if($inputTable[$i][$k] === 'X'){
                     $syndromeTable[$i][$k] = rand(0,1);
+                } else {
+                    $syndromeTable[$i][$k] = $inputTable[$i][$k];
                 }
             }
         }
+        return $syndromeTable;
     }
 }
