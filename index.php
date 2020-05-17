@@ -14,4 +14,7 @@ $row = $syndrome_table_rand[rand(0, 9)];
 
 $something = new BlockComparer($syndrome_table_X, $syndrome_table_rand);
 
-$wut = $something->compare_columns();
+$something->compare_columns()->pretty_print();
+$something->compare_rows()->pretty_print();
+
+echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>";

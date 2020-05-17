@@ -1,0 +1,17 @@
+
+.grid_wrapper {
+    display: grid;
+    width: 50%;
+    margin: 20px;
+    grid-template-columns: min-content 1fr;
+    letter-spacing: 5px;
+}
+
+.potentional_syndrome_table_wrapper {
+    grid-column: 0;
+    justify-self: end;
+}
+
+.actual_syndrome_array_wrapper {
+    grid-column: 1;
+}
