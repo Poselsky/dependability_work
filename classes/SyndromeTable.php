@@ -1,6 +1,6 @@
 <?php 
 class SyndromeTable {
-    public static function get_table () : Array
+    public static function get_table_combinations () : Array
     {
         $table = array();
          // n = 5 k = 1
@@ -103,5 +103,41 @@ class SyndromeTable {
         $table[14][4] = 1;
 
         return $table;
+    }
+
+    public static function generate_possible_points_of_failure() : Array
+    {
+        $table_combs = self::get_table_combinations();
+        $Rp = array();
+        $rows = sizeof($table_combs);
+        $columns = sizeof($table_combs[0]);
+
+        for ($i = 0; $i < $rows; $i++) {
+            for ($k = 0; $k < $columns; $k++) {
+                $h = $k + 1;
+
+                $nextOneRight = ($k + 1) % $columns;
+                $nextTwoRight = ($k + 2) % $columns;
+
+                if($table_combs[$i][$k] === 1) {
+                    $Rp[$i][2 * $h - 1] = 'X';
+                    $Rp[$i][2 * $h - 2] = 'X';
+                } else {
+                    if ($table_combs[$i][$nextOneRight] === 0) {
+                        $Rp[$i][2 * $h - 1] = 0;
+                    }else {
+                        $Rp[$i][2 * $h - 1] = 1;
+                    }
+
+                    if ($table_combs[$i][$nextTwoRight] === 0) {
+                        $Rp[$i][2 * $h - 2] = 0;
+                    }else {
+                        $Rp[$i][2 * $h - 2] = 1;
+                    }
+                }
+            }
+        }
+
+        return $Rp;
     }
 }
