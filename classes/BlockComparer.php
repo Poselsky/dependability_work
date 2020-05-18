@@ -1,5 +1,6 @@
 <?php
 require_once(realpath(dirname(__FILE__) . '/../helpers/transpose.php'));
+require_once(realpath(dirname(__FILE__) . '/SyndromeTable.php'));
 
 class BlockComparer
 {
@@ -26,15 +27,6 @@ class BlockComparer
                     break;
                 }else{
                     if($j === (sizeof($randomSyndromArray) - 1)){
-                        echo "<br>";
-                        print_r($tableOfPotentialSyndromes[$i]);
-                        echo "<br>";
-                        echo "Searched column:";
-                        echo "<br>";
-                        print_r($randomSyndromArray);
-                        echo "<br>";
-                        echo "<br>";
-
                         return new StatInfo($tableOfPotentialSyndromes, $i, $randomSyndromArray, $count, $rowOrColumn);
                     }
                 }
@@ -74,9 +66,9 @@ class StatInfo
     public function pretty_print() {
         echo "<h2>Matching table of potential syndromes with actual syndromes: " . $this->rowOrColumn . "</h2>";
         echo "<p>Index where failure occured: " . $this->index. "</p>";
-        echo "<p>Number of compares: " . $this->numberOfCompares . "</p>";
+        echo "<p>Number of iterations to find faulty unit: " . $this->numberOfCompares . "</p>";
         $this->pretty_print_syndrome_table();
-        
+        echo "<p>Faulty units: " . SyndromeTable::get_table_combinations_units()[$this->index] ."</p>";
     }
 
     private function pretty_print_syndrome_table() 
