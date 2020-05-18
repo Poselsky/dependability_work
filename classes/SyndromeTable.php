@@ -131,15 +131,15 @@ class SyndromeTable {
                     $Rp[$i][2 * $h - 2] = 'X';
                 } else {
                     if ($table_combs[$i][$nextOneRight] === 0) {
-                        $Rp[$i][2 * $h - 1] = 0;
-                    }else {
-                        $Rp[$i][2 * $h - 1] = 1;
-                    }
-
-                    if ($table_combs[$i][$nextTwoRight] === 0) {
                         $Rp[$i][2 * $h - 2] = 0;
                     }else {
                         $Rp[$i][2 * $h - 2] = 1;
+                    }
+
+                    if ($table_combs[$i][$nextTwoRight] === 0) {
+                        $Rp[$i][2 * $h - 1] = 0;
+                    }else {
+                        $Rp[$i][2 * $h - 1] = 1;
                     }
                 }
             }

@@ -8,9 +8,12 @@ class BlockComparer
     {
         $this->tableOfPotentionalSyndromes = $tableOfPotentionalSyndromes;
         $this->tableOfRandomSyndromes = $tableOfRandomSyndromes;
+
+        $size = sizeof($tableOfPotentionalSyndromes);
+        $this->commonRandomSyndromArray = $tableOfRandomSyndromes[rand(0, $size - 1)];
     }
 
-    private function generic_compare($tableOfPotentialSyndromes, $randomSyndromArray, $rowOrColumn = "row") 
+    private function generic_compare($tableOfPotentialSyndromes, $randomSyndromArray, $rowOrColumn = "row")  : IStatInfo
     {
         $syndromeTableRowSize= sizeof($tableOfPotentialSyndromes);
 
@@ -34,25 +37,43 @@ class BlockComparer
         }
     }
 
-    public function compare_columns()
+    public function compare_columns(): IStatInfo
     {
-        $transposed_potentional_syndromes = transpose($this->tableOfPotentionalSyndromes);
-        $size = sizeof($transposed_potentional_syndromes); 
-        $column = array_column($this->tableOfRandomSyndromes, rand(0, $size-1));
+        $syndromeTableColumnSize= sizeof($this->tableOfPotentionalSyndromes[0]);
 
-        return $this->generic_compare($transposed_potentional_syndromes, $column, "column");
+        $randomSyndromArray = $this->commonRandomSyndromArray;
+        $indexes = [];
+        $compares = 0;
+
+        for ($i = 0; $i < sizeof($this->tableOfPotentionalSyndromes); $i++) {
+            $indexes[$i] = $i;
+        }
+
+        for($i = 0; $i < $syndromeTableColumnSize; $i++) {
+            foreach($indexes as $j){
+                $compares++;
+               
+                if($this->tableOfPotentionalSyndromes[$j][$i] !== $randomSyndromArray[$i] && $this->tableOfPotentionalSyndromes[$j][$i] !== 'X') {
+                    unset($indexes[$j]);
+                } 
+                
+                if(sizeof($indexes) === 1) {
+                    return new StatInfo($this->tableOfPotentionalSyndromes, array_pop($indexes), $randomSyndromArray, $compares, 'column');
+                }
+            }
+        }
     }
 
-    public function compare_rows() 
+    public function compare_rows() : IStatInfo
     {
         $size = sizeof($this->tableOfPotentionalSyndromes);
-        return $this->generic_compare($this->tableOfPotentionalSyndromes, $this->tableOfRandomSyndromes[rand(0, $size - 1)], "row");
+        return $this->generic_compare($this->tableOfPotentionalSyndromes, $this->commonRandomSyndromArray, "row");
     }
 }
 ?>
 
 <?php
-class StatInfo
+class StatInfo implements IStatInfo
 {
     public function __construct($potentionalSyndromeTable,$index, $syndromeArray, $numberOfCompares, $rowOrColumn = "row")
     {
@@ -71,7 +92,7 @@ class StatInfo
         echo "<p>Faulty units: " . SyndromeTable::get_table_combinations_units()[$this->index] ."</p>";
     }
 
-    private function pretty_print_syndrome_table() 
+    public function pretty_print_syndrome_table() 
     {
         $tableSize = sizeof($this->potentionalSyndromeTable);
 
@@ -104,4 +125,21 @@ class StatInfo
 
         echo "</div>";
     }
+}
+
+class EmptyStatInfo implements IStatInfo {
+    public function pretty_print()
+    {
+        echo "found nothing";
+    }
+
+    public function pretty_print_syndrome_table()
+    {
+        
+    }
+}
+
+interface IStatInfo {
+    function pretty_print();
+    function pretty_print_syndrome_table();
 }
