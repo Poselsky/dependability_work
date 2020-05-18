@@ -3,8 +3,7 @@
 require_once('./classes/SyndromeTable.php');
 require_once('./classes/RandomSyndromeGenerator.php');
 require_once('./classes/BlockComparer.php');
-
-
+require_once('./helpers/comb.php');
 
 $syndrome_table_X = SyndromeTable::generate_possible_points_of_failure();
 

@@ -1,6 +1,10 @@
 <?php
-require_once(realpath(dirname(__FILE__) . '/../helpers/transpose.php'));
-require_once(realpath(dirname(__FILE__) . '/SyndromeTable.php'));
+
+$path = realpath(dirname(__FILE__));
+
+require_once($path . '/../helpers/transpose.php');
+require_once($path . '/SyndromeTable.php');
+require_once($path . './../helpers/comb.php');
 
 class BlockComparer
 {
@@ -9,8 +13,8 @@ class BlockComparer
         $this->tableOfPotentionalSyndromes = $tableOfPotentionalSyndromes;
         $this->tableOfRandomSyndromes = $tableOfRandomSyndromes;
 
-        $size = sizeof($tableOfPotentionalSyndromes);
-        $this->commonRandomSyndromArray = $tableOfRandomSyndromes[rand(0, $size - 1)];
+        //Failure of one module is has bigger propability than failure of two modules
+        $this->commonRandomSyndromArray = rand(0,9) < 8 ? $tableOfRandomSyndromes[rand(0, 4)] : $tableOfRandomSyndromes[rand(5, 14)];
     }
 
     private function generic_compare($tableOfPotentialSyndromes, $randomSyndromArray, $rowOrColumn = "row")  : IStatInfo
@@ -45,28 +49,44 @@ class BlockComparer
         $indexes = [];
         $compares = 0;
 
-        for ($i = 0; $i < sizeof($this->tableOfPotentionalSyndromes); $i++) {
-            $indexes[$i] = $i;
-        }
+        $statInfo = null;
+        $startIndex = 0;
+        $lastK = 1;
+        $endIndex = combination_number(5, $lastK);
+        while($statInfo == null) {
+            for ($i = $startIndex; $i < $endIndex; $i++) {
+                $indexes[$i] = $i;
+            }
+    
+            for($i = 0; $i < $syndromeTableColumnSize; $i++) {
+                foreach($indexes as $j){
+                    $compares++;
+                   
+                    if($this->tableOfPotentionalSyndromes[$j][$i] !== $randomSyndromArray[$i] && $this->tableOfPotentionalSyndromes[$j][$i] !== 'X') {
+                        unset($indexes[$j]);
+                    } 
 
-        for($i = 0; $i < $syndromeTableColumnSize; $i++) {
-            foreach($indexes as $j){
-                $compares++;
-               
-                if($this->tableOfPotentionalSyndromes[$j][$i] !== $randomSyndromArray[$i] && $this->tableOfPotentionalSyndromes[$j][$i] !== 'X') {
-                    unset($indexes[$j]);
-                } 
-                
-                if(sizeof($indexes) === 1) {
-                    return new StatInfo($this->tableOfPotentionalSyndromes, array_pop($indexes), $randomSyndromArray, $compares, 'column');
+                    if(sizeof($indexes) === 0) {
+                        break 2;
+                    }
                 }
             }
+
+            if(sizeof($indexes) === 1) {
+                $statInfo = new StatInfo($this->tableOfPotentionalSyndromes, array_pop($indexes), $randomSyndromArray, $compares, "column");
+            } else {
+                $startIndex = $endIndex;
+                $lastK++;
+                $endIndex += combination_number(5, $lastK);
+            }
         }
+
+        return $statInfo;
+
     }
 
     public function compare_rows() : IStatInfo
     {
-        $size = sizeof($this->tableOfPotentionalSyndromes);
         return $this->generic_compare($this->tableOfPotentionalSyndromes, $this->commonRandomSyndromArray, "row");
     }
 }
@@ -85,7 +105,7 @@ class StatInfo implements IStatInfo
     }
 
     public function pretty_print() {
-        echo "<h2>Matching table of potential syndromes with actual syndromes: " . $this->rowOrColumn . "</h2>";
+        echo "<h2>Matching table of potential syndromes with actual syndromes: " . $this->rowOrColumn . " algorithm matching</h2>";
         echo "<p>Index where failure occured: " . $this->index. "</p>";
         echo "<p>Number of iterations to find faulty unit: " . $this->numberOfCompares . "</p>";
         $this->pretty_print_syndrome_table();
