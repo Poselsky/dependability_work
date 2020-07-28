@@ -17,7 +17,7 @@ class BlockComparer
         $this->commonRandomSyndromArray = rand(0,9) < 8 ? $tableOfRandomSyndromes[rand(0, 4)] : $tableOfRandomSyndromes[rand(5, 14)];
     }
 
-    private function generic_compare($tableOfPotentialSyndromes, $randomSyndromArray, $rowOrColumn = "row")  : IStatInfo
+    private function generic_compare($tableOfPotentialSyndromes, $randomSyndromArray, $rowOrColumn = "row")  
     {
         $syndromeTableRowSize= sizeof($tableOfPotentialSyndromes);
 
@@ -41,7 +41,7 @@ class BlockComparer
         }
     }
 
-    public function compare_columns(): IStatInfo
+    public function compare_columns()
     {
         $syndromeTableColumnSize= sizeof($this->tableOfPotentionalSyndromes[0]);
 
@@ -85,7 +85,7 @@ class BlockComparer
 
     }
 
-    public function compare_rows() : IStatInfo
+    public function compare_rows() 
     {
         return $this->generic_compare($this->tableOfPotentionalSyndromes, $this->commonRandomSyndromArray, "row");
     }
@@ -102,6 +102,7 @@ class StatInfo implements IStatInfo
         $this->syndromeArray = $syndromeArray;
         $this->numberOfCompares = $numberOfCompares;
         $this->rowOrColumn = $rowOrColumn;
+        $this->faultyUnites = SyndromeTable::get_table_combinations_units()[$this->index];
     }
 
     public function pretty_print() {

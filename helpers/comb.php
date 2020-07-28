@@ -1,6 +1,6 @@
 <?php
 
-function factorial(int $num, $acc = 1)
+function factorial($num, $acc = 1)
 {
     if($num <= 1) {
         return $acc;

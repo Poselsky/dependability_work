@@ -1,6 +1,6 @@
 <?php
 
-function transpose(array $array) : Array
+function transpose(array $array) 
 {
     $keys = array_keys($array);
     return array_map(function($array) use ($keys) {

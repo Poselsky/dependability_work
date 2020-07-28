@@ -1,7 +1,7 @@
 <?php
 
 class RandomSyndromeGenerator{
-    public static function generate_random_failure($inputTable) : Array
+    public static function generate_random_failure($inputTable) 
     {
         $syndromeTable = array();
         for ($i=0; $i < sizeof($inputTable); $i++) { 

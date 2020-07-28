@@ -1,6 +1,6 @@
 <?php 
 class SyndromeTable {
-    public static function get_table_combinations () : Array
+    public static function get_table_combinations () 
     {
         $table = array();
          // n = 5 k = 1
@@ -105,14 +105,14 @@ class SyndromeTable {
         return $table;
     }
 
-    public static function get_table_combinations_units() : Array
+    public static function get_table_combinations_units() 
     {
         $combinedArray = ["u1","u2","u3","u4","u5","u1,u2", "u1,u3", "u1,u4", "u1,u5", "u2,u3", "u2,u4", "u2,u5", "u3,u4", "u3,u5", "u4,u5"];
         
         return $combinedArray;
     }
 
-    public static function generate_possible_points_of_failure() : Array
+    public static function generate_possible_points_of_failure()    
     {
         $table_combs = self::get_table_combinations();
         $Rp = array();
