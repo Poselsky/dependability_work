@@ -37,9 +37,9 @@ print_r ($randomRow);
 $blockComparer = new BlockComparer($syndrome_table_X, $syndrome_table_rand);
 $blockComparer->commonRandomSyndromArray = $randomRow;
 
-$blockComparer->compare_columns()->pretty_print();
+$blockComparer->compare_columns()->pretty_print(5);
 
-$blockComparer->compare_rows()->pretty_print();
+$blockComparer->compare_rows()->pretty_print(5);
 
 ///////////////////////////////////////////////////
 /// 4 UNITS SYSTEM
@@ -76,8 +76,8 @@ $blockComparer_four_units->commonRandomSyndromArray = $randomRow_four_units;
 // TODO ALG NEED TO BE REDESIGN
 //$blockComparer_four_units->compare_columns()->pretty_print();
 
-$blockComparer_four_units->compare_rows()->pretty_print();
-$blockComparer_four_units->compare_columns()->pretty_print();
+$blockComparer_four_units->compare_rows()->pretty_print(4);
+$blockComparer_four_units->compare_columns()->pretty_print(4);
 
 ///////////////////////////////////////////////////
 /// END OF 4 UNITS SYSTEM

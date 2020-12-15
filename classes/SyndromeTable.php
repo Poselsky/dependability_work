@@ -112,6 +112,21 @@ class SyndromeTable {
         return $combinedArray;
     }
 
+    public static function get_table_combinations_units_four_units() 
+    {
+        $combinedArray = ["u1","u2","u3","u4","u5","u1,u2", "u1,u3", "u1,u4", "u1,u5", "u2,u3", "u2,u4", "u2,u5", "u3,u4", "u3,u5", "u4,u5"];
+        unset($combinedArray[8]);
+        unset($combinedArray[7]);
+        unset($combinedArray[6]);
+        unset($combinedArray[5]);
+        unset($combinedArray[0]);
+    
+        $combinedArrayReIndex = array_values($combinedArray);
+        return $combinedArrayReIndex;
+    }
+
+
+
     public static function generate_possible_points_of_failure()    
     {
         $table_combs = self::get_table_combinations();

@@ -99,12 +99,17 @@ class StatInfo implements IStatInfo
         $this->faultyUnites = SyndromeTable::get_table_combinations_units()[$this->index];
     }
 
-    public function pretty_print() {
+    public function pretty_print($unitCounts) {
         echo "<h2>Matching table of potential syndromes with actual syndromes: " . $this->rowOrColumn . " algorithm matching</h2>";
         echo "<p>Index where failure occured: " . $this->index. "</p>";
         echo "<p>Number of iterations to find faulty unit: " . $this->numberOfCompares . "</p>";
         $this->pretty_print_syndrome_table();
-        echo "<p>Faulty units: " . SyndromeTable::get_table_combinations_units()[$this->index] ."</p>";
+        if($unitCounts == 5){
+            echo "<p>Faulty units: " . SyndromeTable::get_table_combinations_units()[$this->index] ."</p>";
+        }
+        if($unitCounts == 4){
+            echo "<p>Faulty units: " . SyndromeTable::get_table_combinations_units_four_units()[$this->index] ."</p>";
+        }
     }
 
     public function pretty_print_syndrome_table()
@@ -143,7 +148,7 @@ class StatInfo implements IStatInfo
 }
 
 class EmptyStatInfo implements IStatInfo {
-    public function pretty_print()
+    public function pretty_print($unitCounts)
     {
         echo "found nothing";
     }
@@ -155,6 +160,6 @@ class EmptyStatInfo implements IStatInfo {
 }
 
 interface IStatInfo {
-    function pretty_print();
+    function pretty_print($unitCounts);
     function pretty_print_syndrome_table();
 }
