@@ -77,6 +77,7 @@ $blockComparer_four_units->commonRandomSyndromArray = $randomRow_four_units;
 //$blockComparer_four_units->compare_columns()->pretty_print();
 
 $blockComparer_four_units->compare_rows()->pretty_print();
+$blockComparer_four_units->compare_columns()->pretty_print();
 
 ///////////////////////////////////////////////////
 /// END OF 4 UNITS SYSTEM
