@@ -13,11 +13,9 @@ class BlockComparer
         $this->tableOfPotentionalSyndromes = $tableOfPotentionalSyndromes;
         $this->tableOfRandomSyndromes = $tableOfRandomSyndromes;
 
-        //Failure of one module is has bigger propability than failure of two modules
-        $this->commonRandomSyndromArray = rand(0,9) < 8 ? $tableOfRandomSyndromes[rand(0, 4)] : $tableOfRandomSyndromes[rand(5, 14)];
     }
 
-    private function generic_compare($tableOfPotentialSyndromes, $randomSyndromArray, $rowOrColumn = "row")  
+    private function generic_compare($tableOfPotentialSyndromes, $randomSyndromArray, $rowOrColumn = "row")
     {
         $syndromeTableRowSize= sizeof($tableOfPotentialSyndromes);
 
@@ -57,14 +55,14 @@ class BlockComparer
             for ($i = $startIndex; $i < $endIndex; $i++) {
                 $indexes[$i] = $i;
             }
-    
+
             for($i = 0; $i < $syndromeTableColumnSize; $i++) {
                 foreach($indexes as $j){
                     $compares++;
-                   
+
                     if($this->tableOfPotentionalSyndromes[$j][$i] !== $randomSyndromArray[$i] && $this->tableOfPotentionalSyndromes[$j][$i] !== 'X') {
                         unset($indexes[$j]);
-                    } 
+                    }
 
                     if(sizeof($indexes) === 0) {
                         break 2;
@@ -85,7 +83,7 @@ class BlockComparer
 
     }
 
-    public function compare_rows() 
+    public function compare_rows()
     {
         return $this->generic_compare($this->tableOfPotentionalSyndromes, $this->commonRandomSyndromArray, "row");
     }
@@ -113,7 +111,7 @@ class StatInfo implements IStatInfo
         echo "<p>Faulty units: " . SyndromeTable::get_table_combinations_units()[$this->index] ."</p>";
     }
 
-    public function pretty_print_syndrome_table() 
+    public function pretty_print_syndrome_table()
     {
         $tableSize = sizeof($this->potentionalSyndromeTable);
 
@@ -156,7 +154,7 @@ class EmptyStatInfo implements IStatInfo {
 
     public function pretty_print_syndrome_table()
     {
-        
+
     }
 }
 
