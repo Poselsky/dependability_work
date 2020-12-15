@@ -51,11 +51,12 @@ class BlockComparer
         $startIndex = 0;
         $lastK = 1;
         $endIndex = combination_number(5, $lastK);
+
+
         while($statInfo == null) {
             for ($i = $startIndex; $i < $endIndex; $i++) {
                 $indexes[$i] = $i;
             }
-
             for($i = 0; $i < $syndromeTableColumnSize; $i++) {
                 foreach($indexes as $j){
                     $compares++;

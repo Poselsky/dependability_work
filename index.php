@@ -1,5 +1,6 @@
 <?php
 require_once('./classes/SyndromeTable.php');
+require_once('./classes/IndexGenerator.php');
 require_once('./classes/RandomSyndromeGenerator.php');
 require_once('./classes/BlockComparer.php');
 require_once('./helpers/comb.php');
@@ -16,23 +17,10 @@ echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>";
 $input = [[0,1,2,3,4],
           [5,6,7,8,9,10,11,12,13,14]];
 $prop = [80,20];
-function get_random_index_by_propability($input = [[]], $probability = [50,50]){
-    $accumulatedWeight = [];
-    $sum = 0;
-    for($i = 0; $i < sizeof($probability); $i++){
-        $sum += $probability[$i];
-        $accumulatedWeight[$i] = $sum;
-    }
-    $r = rand(0, $sum);
 
-    for($i = 0; $i < sizeof($accumulatedWeight); $i++){
-        if($accumulatedWeight[$i] >= $r){
-            return rand($input[$i][0], sizeof($input[$i]));
-        }
-    }
-}
+$indexGenerator = new IndexGenerator();
 
-$randomRowIndex = get_random_index_by_propability($input, $prop);
+$randomRowIndex = $indexGenerator->get_random_index_by_probability($input, $prop);
 $randomRow = $syndrome_table_rand[$randomRowIndex];
 
 echo "Index of generated syndrom: " . $randomRowIndex;
@@ -46,12 +34,54 @@ for ($i=0; $i < sizeof($randomRow); $i++) {
 // $randomRow ted obsahuje nas novy syndrom, ktery budu porovnavat vuci tabulce
 print_r ($randomRow);
 
-$something = new BlockComparer($syndrome_table_X, $syndrome_table_rand);
-$something->commonRandomSyndromArray = $randomRow;
+$blockComparer = new BlockComparer($syndrome_table_X, $syndrome_table_rand);
+$blockComparer->commonRandomSyndromArray = $randomRow;
 
-$something->compare_columns()->pretty_print();
+$blockComparer->compare_columns()->pretty_print();
 
-$something->compare_rows()->pretty_print();
+$blockComparer->compare_rows()->pretty_print();
+
+///////////////////////////////////////////////////
+/// 4 UNITS SYSTEM
+///////////////////////////////////////////////////
+echo "<br>";
+echo "<br>";
+print_r("4 Units system");
+
+$syndrome_table_X_four_units = SyndromeTable::generate_possible_points_of_failure_four_units();
+$syndrome_table_rand_four_units = RandomSyndromeGenerator::generate_random_failure($syndrome_table_X_four_units);
+
+
+$input_four_units = [[0,1,2,3],
+          [4,5,6,7,8,9]];
+$prop_four_units = [80,20];
+
+$randomRowIndex_four_units = $indexGenerator->get_random_index_by_probability($input_four_units, $prop_four_units);
+$randomRow_four_units = $syndrome_table_rand_four_units[$randomRowIndex_four_units];
+
+echo "Index of generated syndrom: " . $randomRowIndex_four_units;
+echo "<br>";
+// doplneni nahodne 0 / 1 za X v radku
+for ($i=0; $i < sizeof($randomRow_four_units); $i++) {
+    if($randomRow_four_units[$i] === 'X'){
+        $randomRow_four_units[$i] = rand(0,1);
+    }
+}
+// $randomRow ted obsahuje nas novy syndrom, ktery budu porovnavat vuci tabulce
+print_r ($randomRow_four_units);
+
+$blockComparer_four_units = new BlockComparer($syndrome_table_X_four_units, $syndrome_table_rand_four_units);
+$blockComparer_four_units->commonRandomSyndromArray = $randomRow_four_units;
+
+// TODO ALG NEED TO BE REDESIGN
+//$blockComparer_four_units->compare_columns()->pretty_print();
+
+$blockComparer_four_units->compare_rows()->pretty_print();
+
+///////////////////////////////////////////////////
+/// END OF 4 UNITS SYSTEM
+///////////////////////////////////////////////////
+
 
 // db connection
 
