@@ -27,7 +27,7 @@ function get_random_index_by_propability($input = [[]], $probability = [50,50]){
 
     for($i = 0; $i < sizeof($accumulatedWeight); $i++){
         if($accumulatedWeight[$i] >= $r){
-            return rand($i, sizeof($input[$i]));
+            return rand($input[$i][0], sizeof($input[$i]));
         }
     }
 }
