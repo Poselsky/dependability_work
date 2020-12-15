@@ -41,46 +41,41 @@ class BlockComparer
 
     public function compare_columns()
     {
-        $syndromeTableColumnSize= sizeof($this->tableOfPotentionalSyndromes[0]);
+        $syndromeTableColumnSize= sizeof($this->tableOfRandomSyndromes);
+        $syndromeTableRowSize = sizeof($this->tableOfRandomSyndromes[0]);
+        $randomSyndromeArray = $this->commonRandomSyndromArray;
 
-        $randomSyndromArray = $this->commonRandomSyndromArray;
-        $indexes = [];
         $compares = 0;
-
         $statInfo = null;
-        $startIndex = 0;
-        $lastK = 1;
-        $endIndex = combination_number(5, $lastK);
 
+        $matchingSyndromes = [];
 
-        while($statInfo == null) {
-            for ($i = $startIndex; $i < $endIndex; $i++) {
-                $indexes[$i] = $i;
+        for($i = 0; $i < $syndromeTableColumnSize; $i++){
+            if($randomSyndromeArray[0] == $this->tableOfRandomSyndromes[$i][0]){
+                $matchingSyndromes  = $matchingSyndromes + [$i => $this->tableOfRandomSyndromes[$i]];
             }
-            for($i = 0; $i < $syndromeTableColumnSize; $i++) {
-                foreach($indexes as $j){
+            $compares++;
+        }
+
+        for($i = 1; $i < $syndromeTableRowSize ; $i++){
+            if(sizeof($matchingSyndromes) !== 1 ){
+                $placeholder = [];
+                foreach($matchingSyndromes as $key => $value){
+                    if($value[$i] == $randomSyndromeArray[$i]){
+                        $placeholder = $placeholder + [$key => $value];
+                    }
+
                     $compares++;
-
-                    if($this->tableOfPotentionalSyndromes[$j][$i] !== $randomSyndromArray[$i] && $this->tableOfPotentionalSyndromes[$j][$i] !== 'X') {
-                        unset($indexes[$j]);
-                    }
-
-                    if(sizeof($indexes) === 0) {
-                        break 2;
-                    }
                 }
-            }
 
-            if(sizeof($indexes) === 1) {
-                $statInfo = new StatInfo($this->tableOfPotentionalSyndromes, array_pop($indexes), $randomSyndromArray, $compares, "column");
-            } else {
-                $startIndex = $endIndex;
-                $lastK++;
-                $endIndex += combination_number(5, $lastK);
+                $matchingSyndromes = $placeholder;
+            }
+            else {
+                break;
             }
         }
 
-        return $statInfo;
+        return new StatInfo($this->tableOfPotentionalSyndromes, array_keys($matchingSyndromes)[0], $this->commonRandomSyndromArray, $compares, "column");
 
     }
 
