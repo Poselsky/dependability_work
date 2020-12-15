@@ -16,18 +16,37 @@ $something->compare_columns()->pretty_print();
 $something->compare_rows()->pretty_print();
 
 echo "<link rel=\"stylesheet\" type=\"text/css\" href=\"style.css\"/>";
-exit;
 // echo "-----------------------------------------------------------------";
 // echo "<br>";
 
 // brani nahodneho radku bez ohledu na pravdepodobnost
-$randomRowIndex = rand(0,14);
+
+$input = [[0,1,2,3,4],
+          [5,6,7,8,9,10,11,12,13,14]];
+$prop = [80,20];
+function get_random_index_by_propability($input = [[]], $probability = [50,50]){
+    $accumulatedWeight = [];
+    $sum = 0;
+    for($i = 0; $i < sizeof($probability); $i++){
+        $sum += $probability[$i];
+        $accumulatedWeight[$i] = $sum;
+    }
+    $r = rand(0, $sum);
+
+    for($i = 0; $i < sizeof($accumulatedWeight); $i++){
+        if($accumulatedWeight[$i] >= $r){
+            return rand($i, sizeof($input[$i]));
+        }
+    }
+}
+
+$randomRowIndex = get_random_index_by_propability($input, $prop);
 $randomRow = $syndrome_table_X[$randomRowIndex];
 
 echo $randomRowIndex;
 echo "<br>";
 // doplneni nahodne 0 / 1 za X v radku
-for ($i=0; $i < sizeof($randomRow); $i++) { 
+for ($i=0; $i < sizeof($randomRow); $i++) {
     if($randomRow[$i] === 'X'){
         $randomRow[$i] = rand(0,1);
     }
@@ -42,7 +61,7 @@ $something->commonRandomSyndromArray = $randomRow;
 $something->compare_columns()->pretty_print();
 echo $something->compare_columns()->numberOfCompares;
 
-// db connection 
+// db connection
 
 $servername = "localhost";
 $username = "root";
@@ -52,8 +71,8 @@ try {
   $conn = new PDO("mysql:host=$servername;dbname=dependability", $username, $password);
   // set the PDO error mode to exception
   $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  
-  for ($j=0; $j < 100; $j++) { 
+
+  for ($j=0; $j < 100; $j++) {
     // random row
     $randomRowIndex = rand(0,9) < 6 ? rand(0, 4) : rand(5, 14);
     $randomRow = $syndrome_table_X[$randomRowIndex];
@@ -61,9 +80,9 @@ try {
 
     $randomRowStr = '';
     $randomRowOriginalStr = '';
-   
+
     // doplneni nahodne 0 / 1 za X v radku
-    for ($i=0; $i < sizeof($randomRow); $i++) { 
+    for ($i=0; $i < sizeof($randomRow); $i++) {
         $randomRowOriginalStr = $randomRowOriginalStr . $randomRow[$i];
 
         if($randomRow[$i] === 'X'){
@@ -71,7 +90,7 @@ try {
         }
 
         $randomRowStr = $randomRowStr . $randomRow[$i];
-    } 
+    }
 
     $something = new BlockComparer($syndrome_table_X, $syndrome_table_rand);
 
